@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Basic user information and pregnancy details",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "lastPeriodDate": { "type": "string", "format": "date-time" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "currentWeek": { "type": "integer" },
+        "onboarded": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "lastPeriodDate", "dueDate", "currentWeek", "onboarded", "createdAt"]
+    },
+    "DailyLog": {
+      "title": "Daily Log",
+      "description": "Daily tracking of symptoms, mood, and water intake",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string" },
+        "symptoms": { "type": "array", "items": { "type": "string" } },
+        "mood": { "type": "string" },
+        "waterIntake": { "type": "integer" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "date", "mood", "waterIntake", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document"
+    },
+    "/users/{userId}/logs/{logId}": {
+      "schema": "DailyLog",
+      "description": "User's daily pregnancy logs"
+    }
+  }
+}

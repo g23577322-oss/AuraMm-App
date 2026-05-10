@@ -1,0 +1,91 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 3. Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Collections ---
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) 
+        && isValidUserProfile(incoming())
+        && isValidId(userId);
+      allow update: if isOwner(userId)
+        && isValidUserProfileUpdate(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && (
+          // Action: Profile Update
+          incoming().diff(existing()).affectedKeys().hasOnly(['name', 'lastPeriodDate', 'dueDate', 'currentWeek'])
+        );
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'name', 'lastPeriodDate', 'dueDate', 'currentWeek', 'onboarded', 'createdAt'])
+        && data.keys().size() == 7
+        && data.uid == request.auth.uid
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.lastPeriodDate is string && data.lastPeriodDate.size() <= 50
+        && data.dueDate is string && data.dueDate.size() <= 50
+        && data.currentWeek is int && data.currentWeek >= 0 && data.currentWeek <= 45
+        && data.onboarded is bool
+        && data.createdAt == request.time;
+    }
+
+    function isValidUserProfileUpdate(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.currentWeek is int && data.currentWeek >= 0 && data.currentWeek <= 45;
+    }
+
+    // Daily Logs Subcollection
+    match /users/{userId}/logs/{logId} {
+      allow list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId)
+        && isValidLog(incoming())
+        && isValidId(logId);
+      allow update: if isOwner(userId)
+        && isValidLog(incoming())
+        && incoming().userId == existing().userId
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['symptoms', 'mood', 'waterIntake', 'notes', 'date']);
+      allow delete: if isOwner(userId);
+    }
+
+    function isValidLog(data) {
+      return data.keys().hasAll(['userId', 'date', 'mood', 'waterIntake', 'createdAt'])
+        && data.userId == request.auth.uid
+        && data.date is string && data.date.size() <= 20
+        && data.mood is string && data.mood.size() <= 50
+        && data.waterIntake is int && data.waterIntake >= 0 && data.waterIntake <= 50
+        && (data.keys().hasAny(['notes']) ? (data.notes is string && data.notes.size() <= 2000) : true)
+        && (data.keys().hasAny(['symptoms']) ? (data.symptoms is list && data.symptoms.size() <= 20) : true)
+        && (resource == null ? data.createdAt == request.time : data.createdAt == existing().createdAt);
+    }
+  }
+}
