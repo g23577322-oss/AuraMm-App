@@ -1,15 +1,16 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, Droplets, Heart } from 'lucide-react';
+import { Sparkles, Droplets, Heart, ArrowLeft } from 'lucide-react';
 import { UserProfile, WeeklyData } from '../../types';
 import { WEEKLY_INSIGHTS } from '../../constants';
 import WeeklyHealthGuide from './WeeklyHealthGuide';
 
 interface DashboardProps {
   user: UserProfile;
+  onBackToWelcome?: () => void;
 }
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard({ user, onBackToWelcome }: DashboardProps) {
   const currentWeek = user.currentWeek;
   const weeklyData: WeeklyData = WEEKLY_INSIGHTS[currentWeek] || {
     week: currentWeek,
@@ -20,7 +21,15 @@ export default function Dashboard({ user }: DashboardProps) {
 
   return (
     <div className="p-8 pb-32 space-y-10 max-w-6xl mx-auto">
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-8 rounded-[2.5rem] shadow-sm border border-pink-50 gap-6">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-8 rounded-[2.5rem] shadow-sm border border-pink-50 gap-6 relative">
+        {onBackToWelcome && (
+          <button 
+            onClick={onBackToWelcome}
+            className="absolute top-4 right-4 sm:static flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-pink-500 transition-colors uppercase tracking-widest"
+          >
+            <ArrowLeft size={16} /> Back to Welcome
+          </button>
+        )}
         <div className="flex items-center gap-5">
           <div className="group relative">
              <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 to-pink-600 rounded-full blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>

@@ -9,14 +9,14 @@ import { calculatePregnancyStats } from './lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import Navigation from './components/Navigation';
 import Onboarding from './features/onboarding/Onboarding';
-import Dashboard from './components/dashboard/Dashboard';
-import DailyLog from './components/DailyLog';
+import Dashboard from './features/dashboard/Dashboard';
+import DailyLog from './features/log/DailyLog';
 import Chat from './features/chat/Chat';
 import ResourceLibrary from './features/resources/ResourceLibrary';
 import LegalPage from './features/legal/LegalPage';
 import CookieConsent from './components/CookieConsent';
-import LandingPage from './components/LandingPage';
-import { LogOut, Loader2, Calendar, ArrowLeft, Shield, Scale, ScrollText, UserCircle } from 'lucide-react';
+import LandingPage from './features/welcome/LandingPage';
+import { LogOut, Loader2, Calendar, ArrowLeft, Shield, Scale, ScrollText, UserCircle, Settings } from 'lucide-react';
 import { FirebaseProvider, useFirebase } from './components/FirebaseProvider';
 import { doc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db, logout, handleFirestoreError, OperationType } from './services/firebase';
@@ -98,9 +98,12 @@ function MainApp() {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="animate-in fade-in duration-1000"
+            className="w-full"
           >
-            <Dashboard user={profile!} />
+            <Dashboard 
+              user={profile!} 
+              onBackToWelcome={() => setHasStarted(false)} 
+            />
           </motion.div>
         );
       case 'log':

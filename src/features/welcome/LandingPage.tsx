@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import DueDateCalculator from './dashboard/DueDateCalculator';
-import { UserProfile } from '../types';
+import DueDateCalculator from '../dashboard/DueDateCalculator';
+import { UserProfile } from '../../types';
 
 interface LandingPageProps {
   user: UserProfile;

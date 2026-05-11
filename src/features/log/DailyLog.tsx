@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MOODS, SYMPTOMS } from '../constants';
+import { MOODS, SYMPTOMS } from '../../constants';
 import { Droplets, Heart, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
-import { useFirebase } from './FirebaseProvider';
+import { useFirebase } from '../../components/FirebaseProvider';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../services/firebase';
+import { db, handleFirestoreError, OperationType } from '../../services/firebase';
 
 interface DailyLogProps {
   onBack?: () => void;
