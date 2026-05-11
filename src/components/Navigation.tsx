@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, ClipboardList, MessageSquare, User } from 'lucide-react';
+import { Home, ClipboardList, MessageSquare, User, BookOpen } from 'lucide-react';
 
 interface NavigationProps {
   activeTab: string;
@@ -9,6 +9,7 @@ interface NavigationProps {
 export default function Navigation({ activeTab, setActiveTab }: NavigationProps) {
   const tabs = [
     { id: 'dashboard', icon: Home, label: 'Home' },
+    { id: 'library', icon: BookOpen, label: 'Resources' },
     { id: 'log', icon: ClipboardList, label: 'Log' },
     { id: 'chat', icon: MessageSquare, label: 'AI Chat' },
     { id: 'profile', icon: User, label: 'Profile' },

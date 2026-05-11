@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Sparkles, Droplets, Heart } from 'lucide-react';
 import { UserProfile, WeeklyData } from '../../types';
 import { WEEKLY_INSIGHTS } from '../../constants';
+import WeeklyHealthGuide from './WeeklyHealthGuide';
 
 interface DashboardProps {
   user: UserProfile;
@@ -18,28 +19,33 @@ export default function Dashboard({ user }: DashboardProps) {
   };
 
   return (
-    <div className="p-8 pb-32 space-y-10 max-w-5xl mx-auto">
-      <header className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border border-pink-50">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 font-bold border-2 border-white shadow-sm font-sans">
-            {user.name.substring(0, 2).toUpperCase()}
+    <div className="p-8 pb-32 space-y-10 max-w-6xl mx-auto">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-8 rounded-[2.5rem] shadow-sm border border-pink-50 gap-6">
+        <div className="flex items-center gap-5">
+          <div className="group relative">
+             <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 to-pink-600 rounded-full blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+             <div className="relative w-14 h-14 bg-white rounded-full flex items-center justify-center text-pink-600 font-bold border-2 border-pink-100 shadow-sm font-sans z-10">
+              {user.name.substring(0, 2).toUpperCase()}
+             </div>
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{user.name}</h1>
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-800">Hi, {user.name}</h1>
+            <p className="text-sm text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1 mt-1">
               Week {currentWeek} • Trimester {currentWeek < 13 ? '1' : currentWeek < 27 ? '2' : '3'}
             </p>
           </div>
         </div>
-        <div className="text-right hidden sm:block">
-          <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Due Date</p>
-          <p className="font-semibold text-pink-600">
+        <div className="bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100">
+          <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Estimated Arrival</p>
+          <p className="font-bold text-slate-800">
             {new Date(user.dueDate).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
       </header>
 
-      {/* Baby Growth Card */}
+      {/* Main Content Area */}
+      <div className="space-y-10">
+        {/* Baby Growth Card */}
       <motion.section 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -146,6 +152,11 @@ export default function Dashboard({ user }: DashboardProps) {
               </motion.div>
             ))}
           </div>
+
+          {/* New Weekly Health Guide */}
+          <div className="pt-8">
+            <WeeklyHealthGuide week={currentWeek} />
+          </div>
         </motion.section>
 
         {/* Tips & Health */}
@@ -192,6 +203,7 @@ export default function Dashboard({ user }: DashboardProps) {
              </div>
            </div>
         </section>
+      </div>
       </div>
     </div>
   );

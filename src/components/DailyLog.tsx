@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { MOODS, SYMPTOMS } from '../../constants';
-import { Droplets, Heart, CheckCircle2, Loader2 } from 'lucide-react';
-import { useFirebase } from '../../components/FirebaseProvider';
+import { MOODS, SYMPTOMS } from '../constants';
+import { Droplets, Heart, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
+import { useFirebase } from './FirebaseProvider';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../../services/firebase';
+import { db, handleFirestoreError, OperationType } from '../services/firebase';
 
-export default function DailyLog() {
+interface DailyLogProps {
+  onBack?: () => void;
+}
+
+export default function DailyLog({ onBack }: DailyLogProps) {
   const { user } = useFirebase();
   const [water, setWater] = useState(4);
   const [selectedMood, setSelectedMood] = useState('');
@@ -45,9 +49,19 @@ export default function DailyLog() {
 
   return (
     <div className="p-6 pb-32 space-y-8 max-w-2xl mx-auto">
-      <header>
-        <h1 className="text-3xl">Daily Check-in</h1>
-        <p className="text-slate-500">How are you and the little one today?</p>
+      <header className="flex items-center gap-4">
+        {onBack && (
+          <button 
+            onClick={onBack}
+            className="p-2 hover:bg-white rounded-full transition-colors text-slate-400 hover:text-pink-500 border border-transparent hover:border-pink-50"
+          >
+            <ArrowLeft size={24} />
+          </button>
+        )}
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Daily Check-in</h1>
+          <p className="text-slate-500">How are you and the little one today?</p>
+        </div>
       </header>
 
       <div className="grid md:grid-cols-2 gap-6">

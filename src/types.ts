@@ -27,4 +27,7 @@ export interface WeeklyData {
   };
   milestones: string[];
   tips: string[];
+  dietPlan?: string[];
+  lifestyleTips?: string[];
+  whatToAvoid?: string[];
 }

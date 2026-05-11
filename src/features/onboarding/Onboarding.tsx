@@ -59,7 +59,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
                referrerPolicy="no-referrer"
              />
           </motion.div>
-          <h1 className="text-4xl mb-4 font-bold tracking-tight">Bloom & Bébé</h1>
+          <h1 className="text-4xl mb-4 font-bold tracking-tight">AuraMom</h1>
           <p className="text-slate-500 text-lg">Your gentle 3D companion journey.</p>
         </div>
 

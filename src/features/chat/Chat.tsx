@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2 } from 'lucide-react';
+import { Send, Bot, User, Loader2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { getAIResponse } from '../../services/gemini';
 
-export default function Chat() {
+interface ChatProps {
+  onBack?: () => void;
+}
+
+export default function Chat({ onBack }: ChatProps) {
   const [messages, setMessages] = useState<{ role: 'user' | 'model'; text: string }[]>([
-    { role: 'model', text: "Hello! I'm Bloom, your supportive pregnancy companion. How can I help you today?" }
+    { role: 'model', text: "Hello! I'm Aura, your supportive pregnancy companion. How can I help you today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +45,14 @@ export default function Chat() {
       
       <header className="p-6 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800 shrink-0 z-20 flex justify-between items-center shadow-2xl">
         <div className="flex items-center gap-3">
+          {onBack && (
+            <button 
+              onClick={onBack}
+              className="p-2 mr-1 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-pink-400"
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
           <div className="relative">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center shadow-lg shadow-pink-500/20">
               <Bot size={22} className="text-white" />
@@ -49,7 +61,7 @@ export default function Chat() {
           </div>
           <div>
             <h1 className="text-sm font-bold text-white tracking-widest uppercase">
-              Bloom AI
+              AuraMom
             </h1>
             <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Always here to help</p>
           </div>

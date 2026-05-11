@@ -1,4 +1,4 @@
-# Security Specification for Bloom & Bébé
+# Security Specification for AuraMom
 
 ## 1. Data Invariants
 - A user can only read and write their own profile document.
